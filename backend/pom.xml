@@ -13,7 +13,7 @@
 	</parent>
 
 	<groupId>orbartal</groupId>
-	<artifactId>spring-boot-demo-mongodb</artifactId>
+	<artifactId>demo-springboot-mongodb</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<description>Spring Boot with Rest Api Swagger and mongodb</description>
 
