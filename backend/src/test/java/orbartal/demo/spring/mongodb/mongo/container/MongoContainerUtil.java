@@ -15,7 +15,7 @@ public class MongoContainerUtil {
 	private static final String MONGO_USER_PASS = "demopass";
 	private static final String MONGO_USER_NAME = "demouser";
 	
-	private static final DockerImageName MONGO_DOCKER_IMAGE = DockerImageName.parse("mongo:4.4.1");
+	private static final DockerImageName MONGO_DOCKER_IMAGE = DockerImageName.parse(MONGO_IMAGE);
 
 	@SuppressWarnings("resource")
 	public static MongoDBContainer buildMongoDbContainer() {
