@@ -1,6 +1,5 @@
 package orbartal.demo.spring.mongodb.mongo.config;
 
-//@Configuration
 public class MongoDockerProperties {
 	private int port = 27017;
 	private String host = "localhost";
@@ -10,10 +9,6 @@ public class MongoDockerProperties {
 	private String demoUserPass = "demouser";
 	private String MONGO_USER_PASS = "demopass";
 	private String MONGO_USER_NAME = "demouser";
-
-	public static MongoDockerProperties getIntance() {
-		return new MongoDockerProperties();
-	}
 
 	public int getPort() {
 		return port;

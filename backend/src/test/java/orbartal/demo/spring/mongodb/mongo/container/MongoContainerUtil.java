@@ -8,10 +8,11 @@ import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.utility.DockerImageName;
 
 import orbartal.demo.spring.mongodb.mongo.config.MongoDockerProperties;
+import orbartal.demo.spring.mongodb.mongo.config.MongoDockerPropertiesProvider;
 
 public class MongoContainerUtil {
 
-	private static final MongoDockerProperties properties = MongoDockerProperties.getIntance();
+	private static final MongoDockerProperties properties = MongoDockerPropertiesProvider.getProperties();
 
 	@SuppressWarnings("resource")
 	public static MongoDBContainer buildMongoDbContainer() {
@@ -28,7 +29,7 @@ public class MongoContainerUtil {
 		registry.add("spring.data.mongodb.port", ()->mapPort0);
 		registry.add("spring.data.mongodb.database", ()->properties.getDemoDb());
 	}
-	
+
 	@SuppressWarnings("resource")
 	public static GenericContainer<?> buildMongoDbContainerWithSecurity() {
 		return new GenericContainer<>
