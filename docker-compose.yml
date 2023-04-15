@@ -94,7 +94,20 @@ services:
             - SPRING_DATA_MONGODB_USERNAME=demouser
             - SPRING_DATA_MONGODB_PASSWORD=demopass
         networks:
-            - demo-tester-spring-mongodb            
+            - demo-tester-spring-mongodb
+
+    demospringmongotester-01:
+        image: orbartal/demo-mongo-spring-tester:latest
+        hostname: demospringmongotester
+        container_name: demospringmongotester-01
+        depends_on:
+            - demospringmongobackend-01
+        ports:
+            - 8090:8090
+        networks:
+            - demo-tester-spring-mongodb
+        environment:
+            - demo.backend.url=http://demospringmongobackend:8080        
 
 networks:
     demo-tester-spring-mongodb:
