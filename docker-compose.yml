@@ -77,5 +77,24 @@ services:
         environment:
             ME_CONFIG_MONGODB_URL: "mongodb://mongo0:27017,mongo1:27017,mongo2:27017/?replicaSet=rs0"
 
+    demospringmongobackend-01:
+        image: orbartal/demo-mongo-spring-backend:latest
+        hostname: demospringmongobackend
+        container_name: demospringmongobackend-01
+        depends_on:
+            - mongo0
+            - mongo1
+            - mongo2
+        ports:
+            - 8080:8080
+        environment:
+        #MongoDB
+            - SPRING_DATA_MONGODB_URI=mongodb://mongo0:27017,mongo1:27017,mongo2:27017/?replicaSet=rs0
+            - SPRING_DATA_MONGODB_DATABASE=demodb
+            - SPRING_DATA_MONGODB_USERNAME=demouser
+            - SPRING_DATA_MONGODB_PASSWORD=demopass
+        networks:
+            - demo-tester-spring-mongodb            
+
 networks:
     demo-tester-spring-mongodb:
