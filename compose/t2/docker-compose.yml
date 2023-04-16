@@ -1,0 +1,111 @@
+version: '3.8'
+
+services:
+
+    mongo.one.db:
+        container_name: mongo.one.db
+        image: mongo:latest
+        hostname: mongo.one.db
+        networks:
+            common.network:
+        ports:
+            - 20000:27017
+        volumes:
+            - mongo.one.vol:/data/db
+        restart: always
+        entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs" ]
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: mongoadmin
+            MONGO_INITDB_ROOT_PASSWORD: mongoadmin
+
+    mongo.two.db:
+        container_name: mongo.two.db
+        hostname: mongo.two.db
+        image: mongo:latest
+        networks:
+            common.network:
+        ports:
+            - 20001:27017
+        depends_on:
+            - mongo.one.db
+        volumes:
+            - mongo.two.vol:/data/db
+        restart: always
+        entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs" ]
+
+    mongo.three.db:
+        container_name: mongo.three.db
+        hostname: mongo.three.db
+        image: mongo:latest
+        networks:
+            common.network:
+        ports:
+            - 20002:27017
+        depends_on:
+            - mongo.one.db      
+        volumes:
+            - mongo.three.vol:/data/db
+        restart: always
+        entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs" ]
+
+    mongo-express-one:
+        image: "mongo-express:latest"
+        container_name: "mongo-express-one"
+        restart: always
+        ports:
+          - 8081:8081
+        networks:
+            common.network:
+        depends_on: 
+          - mongo.one.db
+          - mongo.two.db
+          - mongo.three.db
+        environment:
+            ME_CONFIG_MONGODB_URL: "mongodb://mongo.one.db:27017,mongo.two.db:27017,mongo.three.db:27017/?replicaSet=dbrs"
+
+    demospringmongobackend-one:
+        image: orbartal/demo-mongo-spring-backend:latest
+        hostname: demospringmongobackend
+        container_name: demospringmongobackend-one
+        depends_on:
+          - mongo.one.db
+          - mongo.two.db
+          - mongo.three.db
+        ports:
+            - 8080:8080
+        environment:
+            #MongoDB
+            - SPRING_DATA_MONGODB_URI=mongodb://mongo.one.db:27017,mongo.two.db:27017,mongo.three.db:27017/?replicaSet=dbrs
+            - SPRING_DATA_MONGODB_DATABASE=demodb
+            - SPRING_DATA_MONGODB_USERNAME=demouser
+            - SPRING_DATA_MONGODB_PASSWORD=demopass
+        networks:
+            - common.network
+
+    demospringmongotester-one:
+        image: orbartal/demo-mongo-spring-tester:latest
+        hostname: demospringmongotester
+        container_name: demospringmongotester-one
+        depends_on:
+            - demospringmongobackend-one
+        ports:
+            - 8090:8090
+        networks:
+            - common.network
+        environment:
+            - demo.backend.url=http://demospringmongobackend:8080            
+
+networks:
+    common.network:
+        driver: bridge
+
+volumes:
+
+    mongo.one.vol:
+        name: "mongo.one.vol"
+
+    mongo.two.vol:
+        name: "mongo.two.vol"
+
+    mongo.three.vol:
+        name: "mongo.three.vol"
