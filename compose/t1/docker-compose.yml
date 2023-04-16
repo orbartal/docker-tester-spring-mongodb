@@ -58,7 +58,7 @@ services:
         entrypoint: ["replica_set_init.sh"]
         restart: on-failure
         volumes:
-            - ./scripts/replica_set_init.sh:/usr/local/bin/replica_set_init.sh:ro
+            - ./replica_set_init.sh:/usr/local/bin/replica_set_init.sh:ro
         networks:
             - demo-tester-spring-mongodb
             
