@@ -2,7 +2,7 @@
 
 ### Description
 
-A simple example of compose and 3 services: springboot server, redis db and an e2e tester.
+A simple example of compose and 3 services: springboot server, mongodb db and an e2e tester.
 - The docker compose contain 3 mongodb dockers that work as a single service.
 - A mongo-express that act as a gui, web client, for the mongodb.
 - A backend that I wrote in java spring that provide crud rest api. 
@@ -13,7 +13,7 @@ A simple example of compose and 3 services: springboot server, redis db and an e
 There are currently 3 spring profiles that define the mongo db that the backend server will use:
 1. test: use embeded mongodb docker run with [testcontainer](https://www.testcontainers.org). No changes are needed in the config. Good for auto testing.
 2. dev: use a local mongo server. Fill in details for local DB in application-dev.properties. Good for manual testing locally.
-3. comp: use a set of mongodb dockers that work together as a single service. Fill in detail in the compose file. Good for e2e testing with docker compose.
+3. comp: use a set of mongodb dockers that work together as a single service. Fill in detail in the compose file. Good for e2e testing.
 
 There are currently 4 mods to testing the backend:
 1. Running integration test without running the real backend server. Using spring profile test.
@@ -40,6 +40,8 @@ mvn spring-boot:run
 
 Open url in browser and use the [swagger-ui](http://localhost:8080/swagger-ui/index.html)
 
+Note: you can run the server without docker but must have a docker to run the integration test as it uses docker.
+
 ### Instructions on how to build/run a single docker 
 
 Install docker on your host.
@@ -53,9 +55,20 @@ In the terminal (or cmd) cd into dir "..\docker-tester-spring-mongodb\backend" a
 
 ### Instructions on how to build and run a all dockers
 
-- TODO: how to run the dockers without docker compose
+The project has 2 different docker-compose options you can use.
+They both have the same outcome but use different format.
 
-#### Instructions on how to login into commander and manage redis tables
+The first is in compose/t1. Open terminal and run 2 commands:
+- cd .\docker-tester-spring-mongodb\compose\t1
+- docker compose up
+
+The second is in compose/t2. Open terminal and run 2 commands:
+- cd .\docker-tester-spring-mongodb\compose\t1
+- .\start.sh
+
+Note: If your host OS is Windows and not Linux please use  .\start.bat instead of .\start.sh
+
+#### Instructions on how to login into express ui and manage mongo collections
 
 All the below details are define, and can be modify, in the ./docker-compose.yml file.
 
@@ -72,6 +85,6 @@ All the below details are define, and can be modify, in the ./docker-compose.yml
 ### All urls
 
 Remember that the ports number depend on the .env values use by docker-compose
-- [[mongo-express-ui](http://localhost:28081/)
+- [mongo-express-ui](http://localhost:28081/)
 - [demo-backend-ui](http://localhost:8080/swagger-ui/index.html)
 - [demo-tester-ui](http://localhost:8090/swagger-ui/index.html)
