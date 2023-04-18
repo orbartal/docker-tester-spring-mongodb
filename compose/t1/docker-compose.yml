@@ -6,7 +6,7 @@ services:
         image: mongo:latest
         hostname: mongodb1
         container_name: mongodb1
-        restart: unless-stopped
+        restart: always
         volumes:
             - ./data/db0:/data/db
         networks:
@@ -22,7 +22,7 @@ services:
         image: mongo:latest
         hostname: mongodb2
         container_name: mongodb2
-        restart: unless-stopped
+        restart: always
         volumes:
             - ./data/db1:/data/db
         networks:
@@ -38,7 +38,7 @@ services:
         image: mongo:latest
         hostname: mongodb3
         container_name: mongodb3
-        restart: unless-stopped
+        restart: always
         networks:
             - demo-tester-spring-mongodb-1
         ports:
@@ -81,6 +81,7 @@ services:
         image: orbartal/demo-mongo-spring-backend:latest
         hostname: demospringmongobackend
         container_name: demospringmongobackend-01
+        restart: always
         networks:
             - demo-tester-spring-mongodb-1
         ports:
@@ -100,6 +101,7 @@ services:
         image: orbartal/demo-mongo-spring-tester:latest
         hostname: demospringmongotester
         container_name: demospringmongotester-01
+        restart: always
         networks:
             - demo-tester-spring-mongodb-1
         ports:
