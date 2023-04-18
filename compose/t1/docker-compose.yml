@@ -8,11 +8,11 @@ services:
         container_name: mongodb1
         restart: always
         volumes:
-            - ./data/db0:/data/db
+            - ./data/db1:/data/db
         networks:
             - demo-tester-spring-mongodb-1
         ports:
-            - 27017:27017
+            - 20000:27017
         command: >
             mongod
             --replSet rs0
@@ -24,29 +24,31 @@ services:
         container_name: mongodb2
         restart: always
         volumes:
-            - ./data/db1:/data/db
+            - ./data/db2:/data/db
         networks:
             - demo-tester-spring-mongodb-1
         ports:
-            - 27018:27017    
+            - 20001:27017
         command: >
             mongod
             --replSet rs0
-            --bind_ip localhost,mongodb2    
+            --bind_ip localhost,mongodb2
 
     mongodb3:
         image: mongo:latest
         hostname: mongodb3
         container_name: mongodb3
         restart: always
+        volumes:
+            - ./data/db3:/data/db
         networks:
             - demo-tester-spring-mongodb-1
         ports:
-            - 27019:27017    
+            - 20002:27017
         command: >
             mongod
             --replSet rs0
-            --bind_ip localhost,mongodb3    
+            --bind_ip localhost,mongodb3
 
     mongodb-rs-init:
         image: mongo:latest
@@ -63,19 +65,19 @@ services:
         entrypoint: ["replica_set_init.sh"]
  
     mongo-express-01:
-        image: "mongo-express:latest"
-        container_name: "mongo-express-01"
+        image: mongo-express:latest
+        container_name: mongo-express-01
         restart: always
         networks:
             - demo-tester-spring-mongodb-1
         ports:
-            - "8081:8081"    
+            - 8081:8081   
         depends_on: 
-            - "mongodb1"
-            - "mongodb2"
-            - "mongodb3"
+            - mongodb1
+            - mongodb2
+            - mongodb3
         environment:
-            ME_CONFIG_MONGODB_URL: "mongodb://mongodb1:27017,mongodb2:27017,mongodb3:27017/?replicaSet=rs0"
+            - ME_CONFIG_MONGODB_URL=mongodb://mongodb1:27017,mongodb2:27017,mongodb3:27017/?replicaSet=rs0
 
     demospringmongobackend-01:
         image: orbartal/demo-mongo-spring-backend:latest
@@ -85,7 +87,7 @@ services:
         networks:
             - demo-tester-spring-mongodb-1
         ports:
-            - 8080:8080    
+            - 8080:8080
         depends_on:
             - mongodb1
             - mongodb2
@@ -105,11 +107,11 @@ services:
         networks:
             - demo-tester-spring-mongodb-1
         ports:
-            - 8090:8090    
+            - 8090:8090
         depends_on:
             - demospringmongobackend-01
         environment:
-            - demo.backend.url=http://demospringmongobackend:8080        
+            - demo.backend.url=http://demospringmongobackend:8080
 
 networks:
     demo-tester-spring-mongodb-1:

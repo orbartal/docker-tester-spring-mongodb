@@ -10,7 +10,7 @@ services:
         volumes:
             - ./data/db1:/data/db    
         networks:
-            demo-tester-spring-mongodb-one:
+            - demo-tester-spring-mongodb-one
         ports:
             - 20000:27017
         entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rsone" ]
@@ -23,7 +23,7 @@ services:
         volumes:
             - ./data/db2:/data/db
         networks:
-            demo-tester-spring-mongodb-one:
+            - demo-tester-spring-mongodb-one
         ports:
             - 20001:27017
         entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rsone" ]
@@ -36,25 +36,25 @@ services:
         volumes:
             - ./data/db3:/data/db
         networks:
-            demo-tester-spring-mongodb-one:
+            - demo-tester-spring-mongodb-one
         ports:
             - 20002:27017
         entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rsone" ]
 
     mongo-express-one:
-        image: "mongo-express:latest"
-        container_name: "mongo-express-one"
+        image: mongo-express:latest
+        container_name: mongo-express-one
         restart: always
         networks:
-            demo-tester-spring-mongodb-one:
+            - demo-tester-spring-mongodb-one
         ports:
-          - 8081:8081    
+          - 8081:8081
         depends_on: 
           - mongo.one.db
           - mongo.two.db
           - mongo.three.db
         environment:
-            ME_CONFIG_MONGODB_URL: "mongodb://mongo.one.db:27017,mongo.two.db:27017,mongo.three.db:27017/?replicaSet=rsone"
+            - ME_CONFIG_MONGODB_URL=mongodb://mongo.one.db:27017,mongo.two.db:27017,mongo.three.db:27017/?replicaSet=rsone
 
     demospringmongobackend-one:
         image: orbartal/demo-mongo-spring-backend:latest
@@ -88,7 +88,7 @@ services:
         depends_on:
             - demospringmongobackend-one    
         environment:
-            - demo.backend.url=http://demospringmongobackend:8080            
+            - demo.backend.url=http://demospringmongobackend:8080
 
 networks:
     demo-tester-spring-mongodb-one:
