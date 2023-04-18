@@ -3,9 +3,9 @@ version: '3.8'
 services:
 
     mongo.one.db:
-        container_name: mongo.one.db
         image: mongo:latest
         hostname: mongo.one.db
+        container_name: mongo.one.db
         networks:
             demo-tester-spring-mongodb-one:
         ports:
@@ -16,9 +16,9 @@ services:
         entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rsone" ]
 
     mongo.two.db:
-        container_name: mongo.two.db
-        hostname: mongo.two.db
         image: mongo:latest
+        hostname: mongo.two.db
+        container_name: mongo.two.db
         networks:
             demo-tester-spring-mongodb-one:
         ports:
@@ -31,9 +31,9 @@ services:
         entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rsone" ]
 
     mongo.three.db:
-        container_name: mongo.three.db
-        hostname: mongo.three.db
         image: mongo:latest
+        hostname: mongo.three.db
+        container_name: mongo.three.db
         networks:
             demo-tester-spring-mongodb-one:
         ports:
