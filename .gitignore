@@ -5,6 +5,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 compose/t1/data/*
+compose/t2/data/*
 
 ### STS ###
 .apt_generated

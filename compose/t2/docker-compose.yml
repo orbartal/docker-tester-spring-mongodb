@@ -11,7 +11,7 @@ services:
         ports:
             - 20000:27017
         volumes:
-            - mongo.one.vol:/data/db
+            - ./data/db1:/data/db
         restart: always
         entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rsone" ]
 
@@ -26,7 +26,7 @@ services:
         depends_on:
             - mongo.one.db
         volumes:
-            - mongo.two.vol:/data/db
+            - ./data/db2:/data/db
         restart: always
         entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rsone" ]
 
@@ -41,7 +41,7 @@ services:
         depends_on:
             - mongo.one.db      
         volumes:
-            - mongo.three.vol:/data/db
+            - ./data/db3:/data/db
         restart: always
         entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rsone" ]
 
@@ -95,14 +95,3 @@ services:
 networks:
     demo-tester-spring-mongodb-one:
         driver: bridge
-
-volumes:
-
-    mongo.one.vol:
-        name: "mongo.one.vol"
-
-    mongo.two.vol:
-        name: "mongo.two.vol"
-
-    mongo.three.vol:
-        name: "mongo.three.vol"
