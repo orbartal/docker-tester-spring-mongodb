@@ -14,9 +14,6 @@ services:
             - mongo.one.vol:/data/db
         restart: always
         entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs" ]
-        environment:
-            MONGO_INITDB_ROOT_USERNAME: mongoadmin
-            MONGO_INITDB_ROOT_PASSWORD: mongoadmin
 
     mongo.two.db:
         container_name: mongo.two.db
