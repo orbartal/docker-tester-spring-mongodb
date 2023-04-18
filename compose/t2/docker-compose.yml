@@ -26,8 +26,6 @@ services:
             demo-tester-spring-mongodb-one:
         ports:
             - 20001:27017
-        depends_on:
-            - mongo.one.db
         entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rsone" ]
 
     mongo.three.db:
@@ -41,8 +39,6 @@ services:
             demo-tester-spring-mongodb-one:
         ports:
             - 20002:27017
-        depends_on:
-            - mongo.one.db      
         entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rsone" ]
 
     mongo-express-one:
@@ -65,14 +61,14 @@ services:
         hostname: demospringmongobackend
         container_name: demospringmongobackend-one
         restart: always
-        depends_on:
-          - mongo.one.db
-          - mongo.two.db
-          - mongo.three.db
         networks:
             - demo-tester-spring-mongodb-one  
         ports:
             - 8080:8080
+        depends_on:
+          - mongo.one.db
+          - mongo.two.db
+          - mongo.three.db    
         environment:
             #MongoDB
             - SPRING_DATA_MONGODB_URI=mongodb://mongo.one.db:27017,mongo.two.db:27017,mongo.three.db:27017/?replicaSet=rsone
@@ -85,12 +81,12 @@ services:
         hostname: demospringmongotester
         container_name: demospringmongotester-one
         restart: always
-        depends_on:
-            - demospringmongobackend-one
         networks:
             - demo-tester-spring-mongodb-one
         ports:
             - 8090:8090
+        depends_on:
+            - demospringmongobackend-one    
         environment:
             - demo.backend.url=http://demospringmongobackend:8080            
 
