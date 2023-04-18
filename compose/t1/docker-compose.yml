@@ -6,70 +6,70 @@ services:
         image: mongo:latest
         hostname: mongodb1
         container_name: mongodb1
-        command: >
-            mongod
-            --replSet rs0
-            --bind_ip localhost,mongodb1
-        ports:
-            - 27017:27017
         restart: unless-stopped
         volumes:
             - ./data/db0:/data/db
         networks:
             - demo-tester-spring-mongodb-1
+        ports:
+            - 27017:27017
+        command: >
+            mongod
+            --replSet rs0
+            --bind_ip localhost,mongodb1
 
     mongodb2:
         image: mongo:latest
         hostname: mongodb2
         container_name: mongodb2
-        command: >
-            mongod
-            --replSet rs0
-            --bind_ip localhost,mongodb2
-        ports:
-            - 27018:27017
         restart: unless-stopped
         volumes:
             - ./data/db1:/data/db
         networks:
             - demo-tester-spring-mongodb-1
+        ports:
+            - 27018:27017    
+        command: >
+            mongod
+            --replSet rs0
+            --bind_ip localhost,mongodb2    
 
     mongodb3:
         image: mongo:latest
         hostname: mongodb3
         container_name: mongodb3
-        command: >
-            mongod
-            --replSet rs0
-            --bind_ip localhost,mongodb3
-        ports:
-            - 27019:27017
         restart: unless-stopped
         networks:
             - demo-tester-spring-mongodb-1
+        ports:
+            - 27019:27017    
+        command: >
+            mongod
+            --replSet rs0
+            --bind_ip localhost,mongodb3    
 
     mongodb-rs-init:
         image: mongo:latest
         container_name: mongodb-rs-init
+        restart: on-failure
+        volumes:
+            - ./replica_set_init.sh:/usr/local/bin/replica_set_init.sh:ro
+        networks:
+            - demo-tester-spring-mongodb-1    
         depends_on:
             - mongodb1
             - mongodb2
             - mongodb3
         entrypoint: ["replica_set_init.sh"]
-        restart: on-failure
-        volumes:
-            - ./replica_set_init.sh:/usr/local/bin/replica_set_init.sh:ro
-        networks:
-            - demo-tester-spring-mongodb-1
-            
+ 
     mongo-express-01:
         image: "mongo-express:latest"
         container_name: "mongo-express-01"
         restart: always
-        ports:
-            - "8081:8081"
         networks:
             - demo-tester-spring-mongodb-1
+        ports:
+            - "8081:8081"    
         depends_on: 
             - "mongodb1"
             - "mongodb2"
@@ -81,31 +81,31 @@ services:
         image: orbartal/demo-mongo-spring-backend:latest
         hostname: demospringmongobackend
         container_name: demospringmongobackend-01
+        networks:
+            - demo-tester-spring-mongodb-1
+        ports:
+            - 8080:8080    
         depends_on:
             - mongodb1
             - mongodb2
             - mongodb3
-        ports:
-            - 8080:8080
         environment:
             #MongoDB
             - SPRING_DATA_MONGODB_URI=mongodb://mongodb1:27017,mongodb2:27017,mongodb3:27017/?replicaSet=rs0
             - SPRING_DATA_MONGODB_DATABASE=demodb
             - SPRING_DATA_MONGODB_USERNAME=demouser
             - SPRING_DATA_MONGODB_PASSWORD=demopass
-        networks:
-            - demo-tester-spring-mongodb-1
 
     demospringmongotester-01:
         image: orbartal/demo-mongo-spring-tester:latest
         hostname: demospringmongotester
         container_name: demospringmongotester-01
-        depends_on:
-            - demospringmongobackend-01
-        ports:
-            - 8090:8090
         networks:
             - demo-tester-spring-mongodb-1
+        ports:
+            - 8090:8090    
+        depends_on:
+            - demospringmongobackend-01
         environment:
             - demo.backend.url=http://demospringmongobackend:8080        
 
