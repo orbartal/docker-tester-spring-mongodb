@@ -7,12 +7,12 @@ services:
         hostname: mongo.one.db
         container_name: mongo.one.db
         restart: always
+        volumes:
+            - ./data/db1:/data/db    
         networks:
             demo-tester-spring-mongodb-one:
         ports:
             - 20000:27017
-        volumes:
-            - ./data/db1:/data/db    
         entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rsone" ]
 
     mongo.two.db:
@@ -20,14 +20,14 @@ services:
         hostname: mongo.two.db
         container_name: mongo.two.db
         restart: always
+        volumes:
+            - ./data/db2:/data/db
         networks:
             demo-tester-spring-mongodb-one:
         ports:
             - 20001:27017
         depends_on:
             - mongo.one.db
-        volumes:
-            - ./data/db2:/data/db
         entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rsone" ]
 
     mongo.three.db:
@@ -35,14 +35,14 @@ services:
         hostname: mongo.three.db
         container_name: mongo.three.db
         restart: always
+        volumes:
+            - ./data/db3:/data/db
         networks:
             demo-tester-spring-mongodb-one:
         ports:
             - 20002:27017
         depends_on:
             - mongo.one.db      
-        volumes:
-            - ./data/db3:/data/db
         entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rsone" ]
 
     mongo-express-one:
