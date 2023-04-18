@@ -6,19 +6,20 @@ services:
         image: mongo:latest
         hostname: mongo.one.db
         container_name: mongo.one.db
+        restart: always
         networks:
             demo-tester-spring-mongodb-one:
         ports:
             - 20000:27017
         volumes:
-            - ./data/db1:/data/db
-        restart: always
+            - ./data/db1:/data/db    
         entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rsone" ]
 
     mongo.two.db:
         image: mongo:latest
         hostname: mongo.two.db
         container_name: mongo.two.db
+        restart: always
         networks:
             demo-tester-spring-mongodb-one:
         ports:
@@ -27,13 +28,13 @@ services:
             - mongo.one.db
         volumes:
             - ./data/db2:/data/db
-        restart: always
         entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rsone" ]
 
     mongo.three.db:
         image: mongo:latest
         hostname: mongo.three.db
         container_name: mongo.three.db
+        restart: always
         networks:
             demo-tester-spring-mongodb-one:
         ports:
@@ -42,7 +43,6 @@ services:
             - mongo.one.db      
         volumes:
             - ./data/db3:/data/db
-        restart: always
         entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rsone" ]
 
     mongo-express-one:
@@ -64,6 +64,7 @@ services:
         image: orbartal/demo-mongo-spring-backend:latest
         hostname: demospringmongobackend
         container_name: demospringmongobackend-one
+        restart: always
         depends_on:
           - mongo.one.db
           - mongo.two.db
@@ -83,6 +84,7 @@ services:
         image: orbartal/demo-mongo-spring-tester:latest
         hostname: demospringmongotester
         container_name: demospringmongotester-one
+        restart: always
         depends_on:
             - demospringmongobackend-one
         ports:
