@@ -67,7 +67,7 @@ services:
         container_name: "mongo-express-01"
         restart: always
         ports:
-            - "28081:8081"
+            - "8081:8081"
         networks:
             - demo-tester-spring-mongodb
         depends_on: 
@@ -88,7 +88,7 @@ services:
         ports:
             - 8080:8080
         environment:
-        #MongoDB
+            #MongoDB
             - SPRING_DATA_MONGODB_URI=mongodb://mongodb1:27017,mongodb2:27017,mongodb3:27017/?replicaSet=rs0
             - SPRING_DATA_MONGODB_DATABASE=demodb
             - SPRING_DATA_MONGODB_USERNAME=demouser
