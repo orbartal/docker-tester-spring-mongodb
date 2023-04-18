@@ -16,7 +16,7 @@ services:
         volumes:
             - ./data/db0:/data/db
         networks:
-            - demo-tester-spring-mongodb
+            - demo-tester-spring-mongodb-1
 
     mongodb2:
         image: mongo:latest
@@ -32,7 +32,7 @@ services:
         volumes:
             - ./data/db1:/data/db
         networks:
-            - demo-tester-spring-mongodb
+            - demo-tester-spring-mongodb-1
 
     mongodb3:
         image: mongo:latest
@@ -46,7 +46,7 @@ services:
             - 27019:27017
         restart: unless-stopped
         networks:
-            - demo-tester-spring-mongodb
+            - demo-tester-spring-mongodb-1
 
     mongodb-rs-init:
         image: mongo:latest
@@ -60,7 +60,7 @@ services:
         volumes:
             - ./replica_set_init.sh:/usr/local/bin/replica_set_init.sh:ro
         networks:
-            - demo-tester-spring-mongodb
+            - demo-tester-spring-mongodb-1
             
     mongo-express-01:
         image: "mongo-express:latest"
@@ -69,7 +69,7 @@ services:
         ports:
             - "8081:8081"
         networks:
-            - demo-tester-spring-mongodb
+            - demo-tester-spring-mongodb-1
         depends_on: 
             - "mongodb1"
             - "mongodb2"
@@ -94,7 +94,7 @@ services:
             - SPRING_DATA_MONGODB_USERNAME=demouser
             - SPRING_DATA_MONGODB_PASSWORD=demopass
         networks:
-            - demo-tester-spring-mongodb
+            - demo-tester-spring-mongodb-1
 
     demospringmongotester-01:
         image: orbartal/demo-mongo-spring-tester:latest
@@ -105,9 +105,9 @@ services:
         ports:
             - 8090:8090
         networks:
-            - demo-tester-spring-mongodb
+            - demo-tester-spring-mongodb-1
         environment:
             - demo.backend.url=http://demospringmongobackend:8080        
 
 networks:
-    demo-tester-spring-mongodb:
+    demo-tester-spring-mongodb-1:

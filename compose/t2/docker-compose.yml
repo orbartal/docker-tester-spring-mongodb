@@ -7,7 +7,7 @@ services:
         image: mongo:latest
         hostname: mongo.one.db
         networks:
-            common.network:
+            demo-tester-spring-mongodb-one:
         ports:
             - 20000:27017
         volumes:
@@ -23,7 +23,7 @@ services:
         hostname: mongo.two.db
         image: mongo:latest
         networks:
-            common.network:
+            demo-tester-spring-mongodb-one:
         ports:
             - 20001:27017
         depends_on:
@@ -38,7 +38,7 @@ services:
         hostname: mongo.three.db
         image: mongo:latest
         networks:
-            common.network:
+            demo-tester-spring-mongodb-one:
         ports:
             - 20002:27017
         depends_on:
@@ -55,7 +55,7 @@ services:
         ports:
           - 8081:8081
         networks:
-            common.network:
+            demo-tester-spring-mongodb-one:
         depends_on: 
           - mongo.one.db
           - mongo.two.db
@@ -80,7 +80,7 @@ services:
             - SPRING_DATA_MONGODB_USERNAME=demouser
             - SPRING_DATA_MONGODB_PASSWORD=demopass
         networks:
-            - common.network
+            - demo-tester-spring-mongodb-one
 
     demospringmongotester-one:
         image: orbartal/demo-mongo-spring-tester:latest
@@ -91,12 +91,12 @@ services:
         ports:
             - 8090:8090
         networks:
-            - common.network
+            - demo-tester-spring-mongodb-one
         environment:
             - demo.backend.url=http://demospringmongobackend:8080            
 
 networks:
-    common.network:
+    demo-tester-spring-mongodb-one:
         driver: bridge
 
 volumes:
