@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+
+    mongodb1:
+        image: mongo:latest
+        hostname: mongodb1
+        container_name: mongodb1
+        restart: always
+        volumes:
+            - ./data/db1:/data/db
+        ports:
+            - 20000:27017
+        command: >
+            mongod
+            --replSet rs0
+            --bind_ip localhost,mongodb1
+
+    mongodb2:
+        image: mongo:latest
+        hostname: mongodb2
+        container_name: mongodb2
+        restart: always
+        volumes:
+            - ./data/db2:/data/db
+        ports:
+            - 20001:27017
+        command: >
+            mongod
+            --replSet rs0
+            --bind_ip localhost,mongodb2
+
+    mongodb3:
+        image: mongo:latest
+        hostname: mongodb3
+        container_name: mongodb3
+        restart: always
+        volumes:
+            - ./data/db3:/data/db
+        ports:
+            - 20002:27017
+        command: >
+            mongod
+            --replSet rs0
+            --bind_ip localhost,mongodb3
+
+    mongodb-rs-init:
+        image: mongo:latest
+        container_name: mongodb-rs-init
+        restart: on-failure
+        volumes:
+            - ./replica_set_init.sh:/usr/local/bin/replica_set_init.sh:ro
+        depends_on:
+            - mongodb1
+            - mongodb2
+            - mongodb3
+        entrypoint: ["replica_set_init.sh"]
+ 
+    mongo-express-01:
+        image: mongo-express:latest
+        container_name: mongo-express-01
+        restart: always
+        ports:
+            - 8081:8081   
+        depends_on: 
+            - mongodb1
+            - mongodb2
+            - mongodb3
+        environment:
+            - ME_CONFIG_MONGODB_URL=mongodb://mongodb1:27017,mongodb2:27017,mongodb3:27017/?replicaSet=rs0
