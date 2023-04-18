@@ -13,7 +13,7 @@ services:
         volumes:
             - mongo.one.vol:/data/db
         restart: always
-        entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs" ]
+        entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rsone" ]
 
     mongo.two.db:
         container_name: mongo.two.db
@@ -28,7 +28,7 @@ services:
         volumes:
             - mongo.two.vol:/data/db
         restart: always
-        entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs" ]
+        entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rsone" ]
 
     mongo.three.db:
         container_name: mongo.three.db
@@ -43,7 +43,7 @@ services:
         volumes:
             - mongo.three.vol:/data/db
         restart: always
-        entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs" ]
+        entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rsone" ]
 
     mongo-express-one:
         image: "mongo-express:latest"
@@ -58,7 +58,7 @@ services:
           - mongo.two.db
           - mongo.three.db
         environment:
-            ME_CONFIG_MONGODB_URL: "mongodb://mongo.one.db:27017,mongo.two.db:27017,mongo.three.db:27017/?replicaSet=dbrs"
+            ME_CONFIG_MONGODB_URL: "mongodb://mongo.one.db:27017,mongo.two.db:27017,mongo.three.db:27017/?replicaSet=rsone"
 
     demospringmongobackend-one:
         image: orbartal/demo-mongo-spring-backend:latest
@@ -72,7 +72,7 @@ services:
             - 8080:8080
         environment:
             #MongoDB
-            - SPRING_DATA_MONGODB_URI=mongodb://mongo.one.db:27017,mongo.two.db:27017,mongo.three.db:27017/?replicaSet=dbrs
+            - SPRING_DATA_MONGODB_URI=mongodb://mongo.one.db:27017,mongo.two.db:27017,mongo.three.db:27017/?replicaSet=rsone
             - SPRING_DATA_MONGODB_DATABASE=demodb
             - SPRING_DATA_MONGODB_USERNAME=demouser
             - SPRING_DATA_MONGODB_PASSWORD=demopass
