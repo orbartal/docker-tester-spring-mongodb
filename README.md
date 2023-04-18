@@ -21,42 +21,62 @@ There are currently 4 mods to testing the backend:
 3. Running the backend server as a docker directly and connect to another independent mongodb service.
 4. Running the backend server as a docker using compose. It uses the compose mongodb dockers.
 
-### Instructions on how to build/run the backend locally 
+### Instructions on how to build the backend and run its test
 
-How to build, test, run and use the project server
-
-Download the project from its github [repo](https://github.com/orbartal/docker-tester-spring-mongodb)
+1. Download the project from its github [repo](https://github.com/orbartal/docker-tester-spring-mongodb)
 You can downalod it as zip and extract it. Or use git clone.
 
-Install java 17 from [oracle](https://www.oracle.com/java/technologies/downloads/#java17) 
+2. Install java 17 from [oracle](https://www.oracle.com/java/technologies/downloads/#java17) 
 
-Install maven, on any OS, using [baeldung](https://www.baeldung.com/install-maven-on-windows-linux-mac) guide. 
+3. Install maven, on any OS, using [baeldung](https://www.baeldung.com/install-maven-on-windows-linux-mac) guide. 
 
-In the terminal (or cmd) cd into dir "..\docker-tester-spring-mongodb\backend" and run:
+4. Intsall docker and docker compose on your OS (Linux, Mac, Windows...).
 
-mvn clean install
+Note: you can run the backend without docker but must have a docker to run its integration test and the docker-compose.
 
-mvn spring-boot:run
+5. In the terminal (or cmd) cd into dir "..\docker-tester-spring-mongodb\backend" and run:
+- mvn clean install  -DskipTests
 
-Open url in browser and use the [swagger-ui](http://localhost:8080/swagger-ui/index.html)
+6. Try to run the backend server. It should run but complain there is no mongodb.
+- mvn spring-boot:run
+- Open url in browser and use the [swagger-ui](http://localhost:8080/swagger-ui/index.html)
+- Stop the server before the next stage.
 
-Note: you can run the server without docker but must have a docker to run the integration test as it uses docker.
 
-### Instructions on how to build/run a single docker 
+7. You can now run one or more test from terminal using maven
+- mvn test
+- mvn surefire:test -Dtest=MongoClientTest
+- mvn surefire:test -Dtest=DemoMongoRepositoryTest
+- mvn surefire:test -Dtest=FirstDemoIntegrationTest
+...
 
-Install docker on your host.
+Note: see about maven test from terminal: [maven-surefire-plugin](https://maven.apache.org/surefire/maven-surefire-plugin/examples/single-test.html).
 
-In the terminal (or cmd) cd into dir "..\docker-tester-spring-mongodb\backend" and run 3 commands:
-- mvn clean install -Dmaven.test.skip=true
-- docker build -t orbartal/docker-tester-spring-mongodb .
-- docker run -p 8080:8080 orbartal/docker-tester-spring-mongodb -d 
+### Instructions on how to run and use dev mod locally
 
-- TODO: how to run mongodb locally
+1. Run mongodb docker for local usage. Open terminal/cmd/shell
+- cd .\docker-tester-spring-mongodb\compose\t3
+- docker compose up
 
-### Instructions on how to build and run a all dockers
+2. Run the java spring projects
+- Open your IDE (Eclipse/IntelliJ/NetBeans..) and run backend in debug mod
+- Open your IDE (Eclipse/IntelliJ/NetBeans..) and run tester in debug mod
 
-The project has 2 different docker-compose options you can use.
-They both have the same outcome but use different format.
+3. Open the we client and start using it
+- [mongo-express-ui](http://localhost:28081/)
+- [demo-backend-ui](http://localhost:8080/swagger-ui/index.html)
+- [demo-tester-ui](http://localhost:8090/swagger-ui/index.html)
+
+4. You can now put break point or even modify the java code in the backend and tester code to see how the code behave. 
+
+Note: Instead of docker-compose you may also tey to install and run a local mongodb app on your OS.
+
+### Instructions on how to build and run a all dockers from docker-compose
+
+The project has 2 different docker-compose options you can use: t1 and t2.
+They both have the same outcome but use different method to init the mongodb set:
+- t1 use a temp docker, mongodb-rs-init, to run the init script.
+- t2 use additional external script (bat in Windows and sh in Linux) ir order to run both docker-compose and the init script.
 
 The first is in compose/t1. Open terminal and run 2 commands:
 - cd .\docker-tester-spring-mongodb\compose\t1
