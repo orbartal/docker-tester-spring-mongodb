@@ -11,15 +11,14 @@ A simple example of compose and 3 services: springboot server, mongodb db and an
 ### Use cases and spring profiles
 
 There are currently 3 spring profiles that define the mongo db that the backend server will use:
-1. test: use embeded mongodb docker run with [testcontainer](https://www.testcontainers.org). No changes are needed in the config. Good for auto testing.
-2. dev: use a local mongo server. Fill in details for local DB in application-dev.properties. Good for manual testing locally.
-3. comp: use a set of mongodb dockers that work together as a single service. Fill in detail in the compose file. Good for e2e testing.
+1. test: use embeded mongodb docker run with [testcontainer](https://www.testcontainers.org). No changes are needed in the config. Good for auto small testing.
+2. dev: use a local mongo server. Fill in details for local DB in application-dev.properties. Good for manual testing/debugging locally.
+3. comp: use a set of mongodb dockers that work together as a single service. Fill in detail in the compose file. Good for auto e2e testing.
 
-There are currently 4 mods to testing the backend:
-1. Running integration test without running the real backend server. Using spring profile test.
-2. Running the backend server as local app togther with a local mongodb. Using spring profile dev.
-3. Running the backend server as a docker directly and connect to another independent mongodb service.
-4. Running the backend server as a docker using compose. It uses the compose mongodb dockers.
+There are currently 3 mods to testing the backend:
+1. Running integration test without any external db only a mongodb docker manage by testcontainers. Use spring profile test. 
+2. Running the backend server as local app, in debug mode, togther with a local mongodb or mongodb docker. Using spring profile dev.
+4. Running the tester, backend and mongodb as a dockers using compose. It uses the compose mongodb dockers.
 
 ### Instructions on how to build the backend and run its test
 
